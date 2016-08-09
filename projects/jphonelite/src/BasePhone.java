@@ -877,6 +877,10 @@ public abstract class BasePhone extends javax.swing.JPanel implements SIPClientI
   /** Put a call into or out of hold. */
 
   public void doHold() {
+    doHold(line);
+  }
+  
+  public void doHold(int line) {
     gui.hld_setIcon(ii[PIC_GREY]);
     if (line == -1) return;
     PhoneLine pl = lines[line];
@@ -1352,7 +1356,10 @@ public abstract class BasePhone extends javax.swing.JPanel implements SIPClientI
       PhoneLine pl = lines[a];
       if (pl.callid.equals(callid)) {
         pl.status = "XFER Accepted";
-        if (line == a) gui.updateLine();
+        if (line == a) {
+          endLine(a);
+          gui.updateLine();
+        }
       }
     }
   }

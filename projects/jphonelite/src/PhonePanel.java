@@ -30,6 +30,8 @@ public class PhonePanel extends BasePhone implements MeterController, GUI, Video
       LocalCamera.init(lines);
       if (isApplet) {
         sidePanel.setVisible(false);
+      } else {
+          toggleContacts();
       }
       //must set focus to something or VK_BACK_SPACE beeps
       SwingUtilities.invokeLater(new Runnable(){
@@ -1152,8 +1154,6 @@ public class PhonePanel extends BasePhone implements MeterController, GUI, Video
 
   public void selectLine(int newline) {
     if (line != -1 && lines[line].xfer) {
-      for (int a=0;a<6;a++) lineButtons[a].setSelected(false);
-      lineButtons[line].setSelected(true);
       if (newline == -1) {  //???
         return;
       }
@@ -1161,6 +1161,11 @@ public class PhonePanel extends BasePhone implements MeterController, GUI, Video
         return;
       }
       lines[newline].sip.referLive(lines[newline].callid, lines[line].callid);
+      line = newline;
+      //for (int a=0;a<6;a++) lineButtons[a].setSelected(false);
+      //lineButtons[line].setSelected(true);
+      //updateLine();
+      selectLine(line);
       return;
     }
     if (line != -1 && Settings.current.autohold && lines[line].talking && !lines[line].hld && !lines[line].cnf && newline != line) {
@@ -1181,8 +1186,8 @@ public class PhonePanel extends BasePhone implements MeterController, GUI, Video
     }
     lineButtons[newline].setSelected(true);
     sound.selectLine(newline);
-    if (Settings.current.autohold && lines[line].talking && lines[line].hld == true && newline != line) {
-      doHold();
+    if (newline != -1 && Settings.current.autohold && lines[newline].talking && lines[newline].hld == true && newline != line) {
+      doHold(newline);
     }
     line = newline;
     updateLine();
@@ -1287,7 +1292,7 @@ Line Colors:
   public void setStatus(String number, String server, String status) {
     //BUG : Assuming port 5060 - TLS uses 5061
     if (server.indexOf(':') == -1) server += ":5060";
-    JFLog.log("setStatus(" + number + "," + server + "," + status);
+    JFLog.log("setStatus(" + number + "," + server + "," + status + ")");
     for(int a=0;a<contactList.size();a++) {
       String contact = contactList.get(a).contact;
       String fields[] = SIP.split(contact);
@@ -1626,7 +1631,7 @@ Line Colors:
   //NOTE:using "presence" here, could also use "reg" to track registration
 
   public void addMonitor(String contact, boolean sub) {
-//    JFLog.log("addMonitor:" + contact);
+    //JFLog.log("addMonitor:" + contact);
     String fields[] = SIP.split(contact);
     //only want first 3 fields in the monitorList
     String fields3[] = new String[3];
