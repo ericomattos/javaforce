@@ -28,7 +28,7 @@ public class SIPTCPTransportClient implements SIPTransport {
     try {
       socket = new Socket();
       socket.setSoLinger(true, 0);  //allow to reuse socket again without waiting
-      socket.bind(new InetSocketAddress(InetAddress.getLocalHost(), localport));
+      socket.bind(new InetSocketAddress(localport));
     } catch (Exception e) {
       JFLog.log(e);
       return false;

@@ -367,6 +367,26 @@ public class SIPClient extends SIP implements SIPInterface, STUN.Listener {
     }
   }
 
+  private boolean findlocalhost_dns() {
+    String address;                                                                          
+    try {
+      InetAddress google = InetAddress.getByName("8.8.8.8");                               
+      DatagramSocket ds = new DatagramSocket();
+      ds.setSoTimeout(1000);                                                               
+      ds.connect(google, 53);
+      ds.send(new DatagramPacket(new byte[0], 0));
+      address = ds.getLocalAddress().getHostAddress();
+      // To solve problem with OS "Windows 7"
+      if (address.equals("0.0.0.0")) {
+        return false;
+      }
+      localhost = address;
+      return true;
+    } catch (Exception ex) {
+      return false;
+    }
+  }
+  
   /**
    * Determines local IP address. Method depends on NAT traversal type selected.
    */
@@ -378,6 +398,7 @@ public class SIPClient extends SIP implements SIPInterface, STUN.Listener {
         JFLog.log("SIP:STUN:Failed");
       }
     }
+    if (findlocalhost_dns()) return;
     //try connecting to remotehost on webserver port
     if (findlocalhost_webserver(remotehost)) return;
     //use java (returns local ip, not internet ip) (not reliable on multi-homed systems)
@@ -486,7 +507,9 @@ public class SIPClient extends SIP implements SIPInterface, STUN.Listener {
         req.append("\r\n");
       }
     }
-    req.append("Contact: " + cdsd.contact + "\r\n");
+    if (cdsd.contact != null) {
+      req.append("Contact: " + cdsd.contact + "\r\n");
+    }
     req.append("To: " + join(cdsd.to) + "\r\n");
     req.append("From: " + join(cdsd.from) + "\r\n");
     req.append("Call-ID: " + cd.callid + "\r\n");

@@ -363,14 +363,27 @@ public class RTP implements STUN.Listener {
   }
 
   public RTPChannel findChannel(String ip, int port) {
+    String localIp = getIpAddress(ip);
+    String remoteIp;
     for(int a=0;a<channels.size();a++) {
       RTPChannel channel = channels.get(a);
       if (!channel.active) continue;
-      if (channel.stream.getIP().equals(ip) && (channel.stream.port == -1 || channel.stream.port == port)) {
+      remoteIp = getIpAddress(channel.stream.getIP());
+      if (remoteIp.equals(localIp) && (channel.stream.port == -1 || channel.stream.port == port)) {
         return channel;
       }
     }
     return null;
+  }
+
+  private String getIpAddress(String host) {
+    String ip;
+    try {
+      ip = InetAddress.getByName(host).getHostAddress();
+    } catch (UnknownHostException ex) {
+      ip = host;
+    }
+    return ip;
   }
 
   /**

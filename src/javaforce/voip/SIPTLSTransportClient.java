@@ -34,10 +34,7 @@ public class SIPTLSTransportClient extends SIPTCPTransportClient {
       SSLSocketFactory sslsocketfactory = (SSLSocketFactory) sc.getSocketFactory();  //this method will work with untrusted certs
       socket = sslsocketfactory.createSocket();
       socket.setSoLinger(true, 0);  //allow to reuse socket again without waiting
-      socket.bind(new InetSocketAddress(InetAddress.getLocalHost(), localport));
-      os = socket.getOutputStream();
-      is = socket.getInputStream();
-      connected = true;
+      socket.bind(new InetSocketAddress(localport));
     } catch (Exception e) {
       JFLog.log(e);
     }
