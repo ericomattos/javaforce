@@ -40,6 +40,10 @@
     </javac>
   </target>
 
+  <target name="run" depends="jar" description="runs project">
+    <java classpath="javaforce.jar:bouncycastle.jar:jphonelite.jar" classname="PhoneApp" />
+  </target>
+    
   <target name="jar" depends="compile" description="build jar file">
     <!-- Build jar file from class files -->
     <jar destfile="jphonelite.jar" includes="*.class" basedir="${build}">
