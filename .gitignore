@@ -5,3 +5,5 @@
 /jars/javaforce.jar
 /projects/jphonelite/bouncycastle.jar
 /native/
+/nbproject/private/
+/projects/jphonelite/nbproject/private/
