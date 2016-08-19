@@ -23,9 +23,11 @@ public class AudioBuffer {
     boolean wrap = false;
     int nhead = head + len;
     if (nhead >= bufsiz) {
+      JFLog.log(">>>> Buffer cheio!!");
       wrap = true;
       nhead -= bufsiz;
     }
+    
     if (nhead == tail) return;  //buffer full
     if ( (head > tail) && (nhead > tail) && (wrap) ) return;  //buffer full
     if ( (head < tail) && (nhead > tail) && (!wrap) ) return;  //buffer full

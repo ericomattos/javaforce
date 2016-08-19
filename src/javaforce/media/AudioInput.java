@@ -11,7 +11,7 @@ import javax.sound.sampled.TargetDataLine;
 /**
  * AudioInput.
  *
- * Samples are Big Endian
+ * Samples are Big Endian.
  *
  * @author pquiring
  */
@@ -73,10 +73,12 @@ public class AudioInput {
 
   public boolean read(byte[] buf) {
     if (tdl.available() < buf.length) {
+      JFLog.log(">>>>>>>>>>>> tdl.available() < buf.length");
       return false; //do not block (causes audio glitches)
     }
     int ret = tdl.read(buf, 0, buf.length);
     if (ret != buf.length) {
+      JFLog.log(">>>>>>>>>>>> ret != buf.length");
       return false;
     }
     return true;

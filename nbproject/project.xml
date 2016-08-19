@@ -27,7 +27,16 @@
                     <target>clean</target>
                     <target>jar</target>
                 </action>
+                <action name="debug">
+                    <script>nbproject/ide-file-targets.xml</script>
+                    <target>debug-nb</target>
+                </action>
             </ide-actions>
+            <export>
+                <type>folder</type>
+                <location>src</location>
+                <build-target>jar</build-target>
+            </export>
             <view>
                 <items>
                     <source-folder style="packages">
@@ -43,6 +52,7 @@
                     <ide-action name="rebuild"/>
                     <ide-action name="clean"/>
                     <ide-action name="javadoc"/>
+                    <ide-action name="debug"/>
                 </context-menu>
             </view>
             <subprojects/>
@@ -51,6 +61,7 @@
             <compilation-unit>
                 <package-root>src</package-root>
                 <classpath mode="compile">jars/jcifs.jar;jars/jsch.jar;jars/bouncycastle.jar</classpath>
+                <built-to>src</built-to>
                 <source-level>1.6</source-level>
             </compilation-unit>
         </java-data>

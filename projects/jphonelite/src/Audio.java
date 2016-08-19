@@ -270,7 +270,11 @@ public class Audio {
 
   private boolean read(short buf[]) {
     if (reader == null || !active) return false;
-    if (!reader.read(buf)) return false;
+    if (!reader.read(buf)) {
+      JFLog.log(">>>>>>>>>>>>>>>>>>>>> !reader.read(buf)");
+      return false;
+    }
+    
     scaleBufferVolume(buf, buf.length, volRec);
     int lvl = 0;
     for (int a = 0; a < buf.length; a++) {
@@ -832,7 +836,10 @@ public class Audio {
       }
     }
     public boolean read(short buf[]) {
-      if (buffer.size() < buf.length) return false;
+      if (buffer.size() < buf.length) {
+        JFLog.log(">>>>>>>>>>>>>>>>> (buffer.size() < buf.length) (" + buffer.size() + " < " + buf.length + ")");
+        return false;
+      }
       buffer.get(buf, 0, buf.length);
       return true;
     }
